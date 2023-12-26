@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services.Database;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,29 +7,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.Services
+namespace AutoPartsShop.Controllers
 {
-    public class OrderService
+    public class OrderController
     {
         public event Action OnOrdersChanged;
 
         private List<Order> _orders;
 
-        private UserService _userService;
-        private ProductService _productService;
-        private IOrderDatabaseService _databaseService;
+        private UserController _userController;
+        private ProductController _productController;
+        private IOrderDatabaseController _databaseController;
 
-        public OrderService(UserService userService, ProductService productService, IOrderDatabaseService databaseService)
+        public OrderController(UserController userController, ProductController productController, IOrderDatabaseController databaseController)
         {
-            _userService = userService;
-            _productService = productService;
-            _databaseService = databaseService;
-            _orders = databaseService.ReadOrders();
+            _userController = userController;
+            _productController = productController;
+            _databaseController = databaseController;
+            _orders = databaseController.ReadOrders();
         }
 
         public void SaveOrders()
         {
-            _databaseService.WriteOrders(_orders);
+            _databaseController.WriteOrders(_orders);
         }
 
         public bool MakeOrderPaid(Order order, out string message)
@@ -43,7 +43,7 @@ namespace SportsNutritionShop.Services
             bool isOrderValid = true;
             foreach (var item in order.Products)
             {
-                isOrderValid = isOrderValid && _productService.IsProductCanBeOrdered(item.Product.ProductId, item.Quantity, out message);
+                isOrderValid = isOrderValid && _productController.IsProductCanBeOrdered(item.Product.ProductId, item.Quantity, out message);
             }
 
             if(!isOrderValid)
@@ -55,7 +55,7 @@ namespace SportsNutritionShop.Services
 
             foreach (var item in order.Products)
             {
-                isOrderValid = isOrderValid && _productService.OrderProduct(item.Product.ProductId, item.Quantity, out message);
+                isOrderValid = isOrderValid && _productController.OrderProduct(item.Product.ProductId, item.Quantity, out message);
             }
 
             UpdateOrderStatus(order, OrderStatus.Paid);
@@ -63,22 +63,15 @@ namespace SportsNutritionShop.Services
             return true;
         }
 
-        private void UpdateOrderStatus(Order order, OrderStatus newStatus)
-        {
-            order.OrderStatus = newStatus;
-            Console.WriteLine($"Статус заказа {order.OrderId} обновлен: {newStatus}");
-            OnOrdersChanged?.Invoke();
-        }
-
         public bool PlaceOrder(List<ProductOrder> products, out string message)
         {
-            if(_userService.CurrentUser ==  null)
+            if(_userController.CurrentUser ==  null)
             {
                 message = "Войдите, чтобы сделать заказ";
                 return false;
             }
 
-            Order newOrder = new Order(GenerateOrderId(), _userService.CurrentUser, products, DateTime.Now, OrderStatus.Pending);
+            Order newOrder = new Order(GenerateOrderId(), _userController.CurrentUser, products, DateTime.Now, OrderStatus.Pending);
 
             _orders.Add(newOrder);
 
@@ -90,9 +83,9 @@ namespace SportsNutritionShop.Services
         public List<Order> GetOrders()
         {
             List<Order> userOrders = new List<Order>();
-            if(_userService.CurrentUser != null)
+            if(_userController.CurrentUser != null)
             {
-                userOrders = _orders.FindAll(order => order.User.Username == _userService.CurrentUser.Username);
+                userOrders = _orders.FindAll(order => order.User.Username == _userController.CurrentUser.Username);
             }
 
             return userOrders;
@@ -102,6 +95,13 @@ namespace SportsNutritionShop.Services
         {
             Random random = new Random();
             return random.Next(1000, 9999);
+        }
+
+        private void UpdateOrderStatus(Order order, OrderStatus newStatus)
+        {
+            order.OrderStatus = newStatus;
+            Console.WriteLine($"Статус заказа {order.OrderId} обновлен: {newStatus}");
+            OnOrdersChanged?.Invoke();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,17 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class AddProductToCartForm : Form
     {
-        private ShoppingCartService _shoppingCartService;
+        private MainController _mainController;
+
         private Product _selectedProduct;
 
-        public AddProductToCartForm(ShoppingCartService shoppingCartService, Product product)
+        public AddProductToCartForm(MainController mainController, Product product)
         {
             InitializeComponent();
-            _shoppingCartService = shoppingCartService;
+            _mainController = mainController;
             _selectedProduct = product;
 
             ProductNameLabel.Text = product.Name;
@@ -37,7 +38,7 @@ namespace SportsNutritionShop.View
                 return;
             }
 
-            var result = _shoppingCartService.AddToCart(_selectedProduct, quantity, out string message);
+            var result = _mainController.AddToCart(_selectedProduct, quantity, out string message);
             MessageBox.Show(message);
 
             if(result)

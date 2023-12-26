@@ -1,13 +1,13 @@
-﻿using SportsNutritionShop.Model;
+﻿using AutoPartsShop.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Services.Database
+namespace AutoPartsShop.Controllers.Database
 {
-    public interface IPaymentDatabaseService
+    public interface IPaymentDatabaseController
     {
         List<Receipt> ReadReceipts();
         void WriteReceipts(List<Receipt> receipts);

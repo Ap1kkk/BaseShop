@@ -1,6 +1,6 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
-using SportsNutritionShop.Utils;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
+using AutoPartsShop.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,59 +11,47 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class ShoppingCartForm : Form
     {
-        private ShoppingCartService _shoppingCartService;
-        private OrderService _orderService;
+        private MainController _mainController;
 
-        public ShoppingCartForm(ShoppingCartService shoppingCartService, OrderService orderService)
+        public ShoppingCartForm(MainController mainController)
         {
             InitializeComponent();
-            _shoppingCartService = shoppingCartService;
-            _orderService = orderService;
+            _mainController = mainController;
 
-            _shoppingCartService.OnShoppingCartChanged += UpdateShoppingCart;
+            _mainController.ShoppingCartController.OnShoppingCartChanged += UpdateShoppingCart;
 
             UpdateShoppingCart();
         }
 
         ~ShoppingCartForm()
         {
-            _shoppingCartService.OnShoppingCartChanged -= UpdateShoppingCart;
+            _mainController.ShoppingCartController.OnShoppingCartChanged -= UpdateShoppingCart;
         }
 
         private void UpdateShoppingCart()
         {
-            var cartItems = _shoppingCartService.GetCartItems().ConvertAll(Converter.ConvertProductOrder);
+            var cartItems = _mainController.GetCartItems().ConvertAll(Converter.ConvertProductOrder);
             ShoppingCartDataGridView.DataSource = null;
             ShoppingCartDataGridView.DataSource = cartItems;
             ShoppingCartDataGridView.Update();
         }
 
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void clearButton_Click(object sender, EventArgs e)
         {
-            _shoppingCartService.ClearCartItems();
+            _mainController.ClearCartItems();
             UpdateShoppingCart();
-        }
-
-        private void ShoppingCartForm_Load(object sender, EventArgs e)
-        {
-            Text = "Shopping Cart";
         }
 
         private void OrderButton_Click(object sender, EventArgs e)
         {
-            var products = _shoppingCartService.GetCartItems();
-            if(_orderService.PlaceOrder(products, out string message))
+            var products = _mainController.GetCartItems();
+            if(_mainController.PlaceOrder(products, out string message))
             {
-                _shoppingCartService.ClearCartItems();
+                _mainController.ClearCartItems();
             }
             MessageBox.Show(message);
         }

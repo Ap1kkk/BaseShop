@@ -1,29 +1,29 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services.Database;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Services
+namespace AutoPartsShop.Controllers
 {
-    public class ProductService
+    public class ProductController
     {
         public event Action OnProductsChanged;
 
         private List<Product> _products;
-        private IProductDatabaseService _databaseService;
+        private IProductDatabaseController _databaseController;
 
-        public ProductService(IProductDatabaseService databaseService)
+        public ProductController(IProductDatabaseController databaseController)
         {
-            _databaseService = databaseService;
-            _products = _databaseService.ReadProducts();
+            _databaseController = databaseController;
+            _products = _databaseController.ReadProducts();
         }
 
         public void SaveProducts()
         {
-            _databaseService.WriteProducts(_products);
+            _databaseController.WriteProducts(_products);
         }
 
         public List<Product> GetProducts()

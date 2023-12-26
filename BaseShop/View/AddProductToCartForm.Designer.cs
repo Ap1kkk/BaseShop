@@ -1,16 +1,16 @@
-﻿namespace SportsNutritionShop.View
+﻿namespace AutoPartsShop.View
 {
     partial class AddProductToCartForm
     {
         /// <summary>
-        /// Required designer variable.
+        /// Обязательная переменная дизайнера.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Clean up any resources being used.
+        /// Очистить все используемые ресурсы.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">true, если управляемые ресурсы должны быть удалены; в противном случае — ложь.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,7 +20,8 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Код, сгенерированный конструктором формы
+
         private System.Windows.Forms.Label lblProduct;
         private System.Windows.Forms.Label lblQuantity;
         private System.Windows.Forms.Button btnAddToCart;
@@ -40,41 +41,42 @@
             this.lblProduct.AutoSize = true;
             this.lblProduct.Location = new System.Drawing.Point(12, 15);
             this.lblProduct.Name = "lblProduct";
-            this.lblProduct.Size = new System.Drawing.Size(76, 13);
+            this.lblProduct.Size = new System.Drawing.Size(98, 13);
             this.lblProduct.TabIndex = 1;
-            this.lblProduct.Text = "Product name:";
+            this.lblProduct.Text = "Название товара:";
             // 
             // lblQuantity
             // 
             this.lblQuantity.AutoSize = true;
             this.lblQuantity.Location = new System.Drawing.Point(12, 41);
             this.lblQuantity.Name = "lblQuantity";
-            this.lblQuantity.Size = new System.Drawing.Size(49, 13);
+            this.lblQuantity.Size = new System.Drawing.Size(69, 13);
             this.lblQuantity.TabIndex = 2;
-            this.lblQuantity.Text = "Quantity:";
+            this.lblQuantity.Text = "Количество:";
             // 
             // btnAddToCart
             // 
-            this.btnAddToCart.Location = new System.Drawing.Point(94, 75);
+            this.btnAddToCart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddToCart.Location = new System.Drawing.Point(83, 75);
             this.btnAddToCart.Name = "btnAddToCart";
-            this.btnAddToCart.Size = new System.Drawing.Size(91, 23);
+            this.btnAddToCart.Size = new System.Drawing.Size(137, 23);
             this.btnAddToCart.TabIndex = 4;
-            this.btnAddToCart.Text = "Add";
+            this.btnAddToCart.Text = "Добавить";
             this.btnAddToCart.UseVisualStyleBackColor = true;
             this.btnAddToCart.Click += new System.EventHandler(this.btnAddToCart_Click);
             // 
             // ProductNameLabel
             // 
-            this.ProductNameLabel.Location = new System.Drawing.Point(104, 15);
+            this.ProductNameLabel.Location = new System.Drawing.Point(116, 15);
             this.ProductNameLabel.Name = "ProductNameLabel";
-            this.ProductNameLabel.Size = new System.Drawing.Size(180, 20);
+            this.ProductNameLabel.Size = new System.Drawing.Size(168, 20);
             this.ProductNameLabel.TabIndex = 5;
             // 
             // quantityUpDown
             // 
-            this.quantityUpDown.Location = new System.Drawing.Point(104, 41);
+            this.quantityUpDown.Location = new System.Drawing.Point(116, 41);
             this.quantityUpDown.Name = "quantityUpDown";
-            this.quantityUpDown.Size = new System.Drawing.Size(180, 20);
+            this.quantityUpDown.Size = new System.Drawing.Size(168, 20);
             this.quantityUpDown.TabIndex = 6;
             // 
             // AddProductToCartForm
@@ -88,7 +90,7 @@
             this.Controls.Add(this.lblQuantity);
             this.Controls.Add(this.lblProduct);
             this.Name = "AddProductToCartForm";
-            this.Text = "Add to shopping cart";
+            this.Text = "Добавить в корзину";
             ((System.ComponentModel.ISupportInitialize)(this.quantityUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

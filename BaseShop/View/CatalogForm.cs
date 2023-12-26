@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class CatalogForm : Form
     {
@@ -20,26 +20,21 @@ namespace SportsNutritionShop.View
 
         private AddProductForm _addProductForm;
 
-        private UserService _userService;
-        private ProductService _productService;
-        private ShoppingCartService _shoppingCartService;
+        private MainController _mainController;
 
-        public CatalogForm(UserService userService, ProductService productService, ShoppingCartService shoppingCartService)
+        public CatalogForm(MainController mainController)
         {
             InitializeComponent();
 
-            _shoppingCartService = shoppingCartService;
+            _addProductForm = new AddProductForm(mainController);
 
-            _addProductForm = new AddProductForm(productService);
+            _mainController = mainController;
+            _mainController.ProductController.OnProductsChanged += UpdateCatalog;
 
-            _productService = productService;
-            _productService.OnProductsChanged += UpdateCatalog;
+            _mainController.UserController.OnUserChanged += _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut += _userController_OnUserLoggedOut;
 
-            _userService = userService;
-            _userService.OnUserChanged += _userService_OnUserChanged;
-            _userService.OnUserLoggedOut += _userService_OnUserLoggedOut;
-
-            catgalogDataGridView.RowEnter += CatgalogDataGridView_RowEnter;
+            catalogDataGridView.RowEnter += CatgalogDataGridView_RowEnter;
 
             UpdateCatalog();
             UpdateAddProductButtonVisibility(false);
@@ -48,10 +43,10 @@ namespace SportsNutritionShop.View
 
         ~CatalogForm()
         {
-            _productService.OnProductsChanged -= UpdateCatalog;
-            _userService.OnUserChanged -= _userService_OnUserChanged;
-            _userService.OnUserLoggedOut -= _userService_OnUserLoggedOut;
-            catgalogDataGridView.RowEnter -= CatgalogDataGridView_RowEnter;
+            _mainController.ProductController.OnProductsChanged -= UpdateCatalog;
+            _mainController.UserController.OnUserChanged -= _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut -= _userController_OnUserLoggedOut;
+            catalogDataGridView.RowEnter -= CatgalogDataGridView_RowEnter;
         }
 
         private void CatgalogDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
@@ -66,12 +61,12 @@ namespace SportsNutritionShop.View
             }
         }
 
-        private void _userService_OnUserLoggedOut()
+        private void _userController_OnUserLoggedOut()
         {
             UpdateAddProductButtonVisibility(false);
         }
 
-        private void _userService_OnUserChanged(User user)
+        private void _userController_OnUserChanged(User user)
         {
             UpdateAddProductButtonVisibility(user.IsAdmin);
         }
@@ -88,20 +83,15 @@ namespace SportsNutritionShop.View
 
         private void UpdateCatalog()
         {
-            _products = _productService.GetProducts();
-            catgalogDataGridView.DataSource = null;
-            catgalogDataGridView.DataSource = _products;
-            catgalogDataGridView.Update();
+            _products = _mainController.GetProducts();
+            catalogDataGridView.DataSource = null;
+            catalogDataGridView.DataSource = _products;
+            catalogDataGridView.Update();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void CatalogForm_Load(object sender, EventArgs e)
-        {
-            Text = "Product Catalog";
         }
 
         private void AddToolStripMenuItem_Click(object sender, EventArgs e)
@@ -111,8 +101,29 @@ namespace SportsNutritionShop.View
 
         private void AddToShoppingCartButton_Click(object sender, EventArgs e)
         {
-            var addProductToCartForm = new AddProductToCartForm(_shoppingCartService, _chosenProduct);
+            var addProductToCartForm = new AddProductToCartForm(_mainController, _chosenProduct);
             addProductToCartForm.ShowDialog();
+        }
+
+        private void filterTextBox_TextChanged(object sender, EventArgs e)
+        {
+            FilterCatalog();
+        }
+
+        private void FilterCatalog()
+        {
+            string filterText = filterTextBox.Text.ToLower();
+
+            List<Product> filteredProducts = _products
+                .Where(product =>
+                    product.Name.ToLower().Contains(filterText) ||
+                    product.Description.ToLower().Contains(filterText) ||
+                    product.Price.ToString().Contains(filterText))
+                .ToList();
+
+            catalogDataGridView.DataSource = null;
+            catalogDataGridView.DataSource = filteredProducts;
+            catalogDataGridView.Update();
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Model
+namespace AutoPartsShop.Model
 {
     [Serializable]
     public class Order

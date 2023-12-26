@@ -1,11 +1,11 @@
-﻿using SportsNutritionShop.Model;
+﻿using AutoPartsShop.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.View.Model_View
+namespace AutoPartsShop.View.Model_View
 {
     public struct ProductOrderView
     {

@@ -1,13 +1,13 @@
-﻿using SportsNutritionShop.Model;
+﻿using AutoPartsShop.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Services.Database
+namespace AutoPartsShop.Controllers.Database
 {
-    public interface IUserDatabaseService
+    public interface IUserDatabaseController
     {
         List<User> ReadUsers();
         void WriteUsers(List<User> users);

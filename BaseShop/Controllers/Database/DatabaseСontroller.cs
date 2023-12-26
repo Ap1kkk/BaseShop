@@ -1,4 +1,4 @@
-﻿using SportsNutritionShop.Model;
+﻿using AutoPartsShop.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +8,15 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
 
-namespace SportsNutritionShop.Services.Database
+namespace AutoPartsShop.Controllers.Database
 {
-    public class DatabaseService : IUserDatabaseService, IPaymentDatabaseService, 
-        IOrderDatabaseService, IProductDatabaseService, IShoppingCartDatabaseService
+    public class DatabaseСontroller : IUserDatabaseController, IPaymentDatabaseController, 
+        IOrderDatabaseController, IProductDatabaseController, IShoppingCartDatabaseController
     {
         private string _dataFilePath;
         private DatabaseData _databaseData;
 
-        public DatabaseService(string dataFilePath)
+        public DatabaseСontroller(string dataFilePath)
         {
             _dataFilePath = dataFilePath;
 

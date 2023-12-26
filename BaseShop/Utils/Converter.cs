@@ -1,12 +1,12 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.View.Model_View;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.View.Model_View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Utils
+namespace AutoPartsShop.Utils
 {
     public static class Converter
     {

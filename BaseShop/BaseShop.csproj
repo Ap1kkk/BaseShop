@@ -76,17 +76,17 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Database\DatabaseService.cs" />
-    <Compile Include="Services\Database\IOrderDatabaseService.cs" />
-    <Compile Include="Services\Database\IPaymentDatabaseService.cs" />
-    <Compile Include="Services\Database\IProductDatabaseService.cs" />
-    <Compile Include="Services\Database\IUserDatabaseService.cs" />
-    <Compile Include="Services\Database\IShoppingCartDatabaseService.cs" />
-    <Compile Include="Services\OrderService.cs" />
-    <Compile Include="Services\PaymentService.cs" />
-    <Compile Include="Services\ProductService.cs" />
-    <Compile Include="Services\ShoppingCartService.cs" />
-    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Controllers\Database\DatabaseСontroller.cs" />
+    <Compile Include="Controllers\Database\IOrderDatabaseController.cs" />
+    <Compile Include="Controllers\Database\IPaymentDatabaseController.cs" />
+    <Compile Include="Controllers\Database\IProductDatabaseController.cs" />
+    <Compile Include="Controllers\Database\IUserDatabaseController.cs" />
+    <Compile Include="Controllers\Database\IShoppingCartDatabaseController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Utils\Converter.cs" />
     <Compile Include="View\AddProductForm.cs">
       <SubType>Form</SubType>
@@ -173,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\CatalogForm.resx">
       <DependentUpon>CatalogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

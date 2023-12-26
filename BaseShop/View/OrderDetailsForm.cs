@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Utils;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class OrderDetailsForm : Form
     {
@@ -31,16 +31,6 @@ namespace SportsNutritionShop.View
             orderItemsDataGridView.DataSource = null;
             orderItemsDataGridView.DataSource = Converter.ConvertProductOrders(_order.Products);
             orderItemsDataGridView.Update();
-        }
-
-        private void closeButton_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void OrderDetailsForm_Load(object sender, EventArgs e)
-        {
-            Text = "Order Details";
         }
     }
 }

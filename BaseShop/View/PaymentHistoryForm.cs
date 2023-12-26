@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,26 +10,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class PaymentHistoryForm : Form
     {
+        private MainController _mainController;
 
-        private UserService _userService;
-        private PaymentService _paymentService;
-
-        public PaymentHistoryForm(UserService userService, PaymentService paymentService)
+        public PaymentHistoryForm(MainController mainController)
         {
             InitializeComponent();
-            _userService = userService;
-            _userService.OnUserChanged += _userService_OnUserChanged;
-            _userService.OnUserLoggedOut += UpdateData;
+            _mainController = mainController;
 
-            _paymentService = paymentService;
-            _paymentService.OnPaymentChanged += UpdateData;
+            _mainController.UserController.OnUserChanged += _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut += UpdateData;
+
+            _mainController.PaymentController.OnPaymentChanged += UpdateData;
+        }
+        ~PaymentHistoryForm()
+        {
+            _mainController.UserController.OnUserChanged -= _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut -= UpdateData;
+
+            _mainController.PaymentController.OnPaymentChanged -= UpdateData;
         }
 
-        private void _userService_OnUserChanged(User user)
+        private void _userController_OnUserChanged(User user)
         {
             UpdateData();
         }
@@ -37,7 +42,7 @@ namespace SportsNutritionShop.View
         private void UpdateData()
         {
             dgvPaymentHistory.DataSource = null;
-            dgvPaymentHistory.DataSource = _paymentService.GetReceipts();
+            dgvPaymentHistory.DataSource = _mainController.GetReceipts();
             dgvPaymentHistory.Update();
         }
     }

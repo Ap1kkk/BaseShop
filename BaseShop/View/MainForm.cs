@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Controllers;
-using SportsNutritionShop.Model;
+﻿using AutoPartsShop.Controllers;
+using AutoPartsShop.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class MainForm : Form
     {
@@ -28,16 +28,11 @@ namespace SportsNutritionShop.View
 
             _mainController = mainController;
 
-            _userProfileForm = new UserProfileForm(_mainController.UserService);
-            _shoppingCartForm = new ShoppingCartForm(_mainController.ShoppingCartService, _mainController.OrderService);
-            _catalogForm = new CatalogForm(_mainController.UserService, _mainController.ProductService, _mainController.ShoppingCartService);
-            _ordersForm = new OrdersForm(_mainController.UserService, _mainController.OrderService, _mainController.PaymentService);
-            _paymentHistoryForm = new PaymentHistoryForm(_mainController.UserService, _mainController.PaymentService);
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            Text = "Sport Nutrition Store";
+            _userProfileForm = new UserProfileForm(_mainController);
+            _shoppingCartForm = new ShoppingCartForm(_mainController);
+            _catalogForm = new CatalogForm(_mainController);
+            _ordersForm = new OrdersForm(_mainController);
+            _paymentHistoryForm = new PaymentHistoryForm(_mainController);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

@@ -1,39 +1,39 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services.Database;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Services
+namespace AutoPartsShop.Controllers
 {
-    public class ShoppingCartService
+    public class ShoppingCartController
     {
         public event Action OnShoppingCartChanged;
 
-        private IShoppingCartDatabaseService _databaseService;
-        private UserService _userService;
+        private IShoppingCartDatabaseController _databaseController;
+        private UserController _userController;
         private List<ShoppingCart> _shoppingCarts;
         private ShoppingCart _currentShoppingCart;
 
-        public ShoppingCartService(UserService userService, IShoppingCartDatabaseService databaseService)
+        public ShoppingCartController(UserController userController, IShoppingCartDatabaseController databaseController)
         {
-            _userService = userService;
-            _databaseService = databaseService;
-            _shoppingCarts = databaseService.ReadShoppingCarts();
+            _userController = userController;
+            _databaseController = databaseController;
+            _shoppingCarts = databaseController.ReadShoppingCarts();
 
-            _userService.OnUserChanged += ChangeUser;
-            ChangeUser(_userService.CurrentUser);
+            _userController.OnUserChanged += ChangeUser;
+            ChangeUser(_userController.CurrentUser);
         }
-        ~ShoppingCartService()
+        ~ShoppingCartController()
         {
-            _userService.OnUserChanged -= ChangeUser;
+            _userController.OnUserChanged -= ChangeUser;
         }
 
         public void SaveShoppingCarts()
         {
-            _databaseService.WriteShoppingCarts(_shoppingCarts);
+            _databaseController.WriteShoppingCarts(_shoppingCarts);
         }
 
         private void ChangeUser(User user)

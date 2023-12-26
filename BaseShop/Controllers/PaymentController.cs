@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services.Database;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers.Database;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,52 +8,52 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.Services
+namespace AutoPartsShop.Controllers
 {
-    public class PaymentService
+    public class PaymentController
     {
         public event Action OnPaymentChanged;
 
-        private UserService _userService;
-        private OrderService _orderService;
-        private IPaymentDatabaseService _databaseService;
+        private UserController _userController;
+        private OrderController _orderController;
+        private IPaymentDatabaseController _databaseController;
 
         private List<Receipt> _receipts;
 
-        public PaymentService(UserService userService, OrderService orderService, IPaymentDatabaseService databaseService)
+        public PaymentController(UserController userController, OrderController orderController, IPaymentDatabaseController databaseController)
         {
-            _userService = userService;
+            _userController = userController;
 
-            _orderService = orderService;
+            _orderController = orderController;
 
-            _databaseService = databaseService;
-            _receipts = _databaseService.ReadReceipts();
+            _databaseController = databaseController;
+            _receipts = _databaseController.ReadReceipts();
         }
 
         public void Save()
         {
-            _databaseService.WriteReceipts(_receipts);
+            _databaseController.WriteReceipts(_receipts);
         }
 
         public List<Receipt> GetReceipts()
         {
             List<Receipt> receipts = new List<Receipt>();
-            if(_userService.CurrentUser != null)
+            if(_userController.CurrentUser != null)
             {
-                receipts = _receipts.FindAll(c => c.User.Username ==  _userService.CurrentUser.Username);
+                receipts = _receipts.FindAll(c => c.User.Username ==  _userController.CurrentUser.Username);
             }
             return receipts;
         }
 
         public bool ProcessPayment(Order order, out string message)
         {
-            if(_userService.CurrentUser == null)
+            if(_userController.CurrentUser == null)
             {
                 message = "Войдите в аккаунт, чтобы оплатить заказ";
                 return false;
             }
 
-            if(!_orderService.MakeOrderPaid(order, out message))
+            if(!_orderController.MakeOrderPaid(order, out message))
             {
                 return false;
             }
@@ -66,7 +66,7 @@ namespace SportsNutritionShop.Services
 
         private Receipt GenerateReceipt(Order order)
         {
-            return new Receipt(order.OrderId, _userService.CurrentUser, DateTime.Now, order.CalculateTotal());
+            return new Receipt(order.OrderId, _userController.CurrentUser, DateTime.Now, order.CalculateTotal());
         }
 
         private void LogPaymentHistory(Receipt receipt)

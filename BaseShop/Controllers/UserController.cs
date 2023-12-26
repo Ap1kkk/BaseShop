@@ -1,14 +1,14 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services.Database;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SportsNutritionShop.Services
+namespace AutoPartsShop.Controllers
 {
-    public class UserService
+    public class UserController
     {
         public static User DefaultUser => new User() { Username = "DEFAULT", Password = "DEFAULT", Adress = "DEFAULT", Email = "DEFAULT" };
 
@@ -19,17 +19,17 @@ namespace SportsNutritionShop.Services
         public bool IsLoggedIn => CurrentUser != null;
 
         private List<User> _registeredUsers;
-        private IUserDatabaseService _databaseService;
+        private IUserDatabaseController _databaseController;
 
-        public UserService(IUserDatabaseService databaseService)
+        public UserController(IUserDatabaseController databaseController)
         {
-            _databaseService = databaseService;
-            _registeredUsers = _databaseService.ReadUsers();
+            _databaseController = databaseController;
+            _registeredUsers = _databaseController.ReadUsers();
         }
 
         public void SaveUsers()
         {
-            _databaseService.WriteUsers(_registeredUsers);
+            _databaseController.WriteUsers(_registeredUsers);
         }
 
         public bool RegisterUser(bool isAdmin, string username, string password, string email, string adress, out string message)

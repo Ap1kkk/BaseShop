@@ -1,4 +1,4 @@
-﻿using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,16 +9,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class LoginForm : Form
     {
-        private UserService _userService;
+        private MainController _mainController;
 
-        public LoginForm(UserService userService)
+        public LoginForm(MainController mainController)
         {
             InitializeComponent();
-            _userService = userService;
+
+            _mainController = mainController;
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -28,7 +29,7 @@ namespace SportsNutritionShop.View
 
             string message = string.Empty;
 
-            if (_userService.LogInUser(username, password, out message))
+            if (_mainController.LogInUser(username, password, out message))
             {
                 MessageBox.Show(message);
                 Close();
@@ -39,9 +40,9 @@ namespace SportsNutritionShop.View
             }
         }
 
-        private void registerLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void registerBtn_Click(object sender, EventArgs e)
         {
-            RegisterForm registrationForm = new RegisterForm(_userService);
+            RegisterForm registrationForm = new RegisterForm(_mainController);
             registrationForm.ShowDialog();
         }
     }

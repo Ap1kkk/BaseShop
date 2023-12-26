@@ -1,4 +1,4 @@
-﻿using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,20 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class RegisterForm : Form
     {
-        private UserService _userService;
-        public RegisterForm(UserService userService)
+        private MainController _mainController;
+
+        public RegisterForm(MainController mainController)
         {
             InitializeComponent();
-            _userService = userService;
+
+            _mainController = mainController;
         }
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            // Проверка введенных данных и выполнение регистрации
             bool isAdmin = IsAdminCheckBox.Checked;
             string username = usernameTextBox.Text;
             string email = EmailTextBox.Text;
@@ -31,7 +32,7 @@ namespace SportsNutritionShop.View
 
             string message = string.Empty;
 
-            if(_userService.RegisterUser(isAdmin, username, password, email, adress, out message))
+            if(_mainController.RegisterUser(isAdmin, username, password, email, adress, out message))
             {
                 MessageBox.Show(message);
                 Close();

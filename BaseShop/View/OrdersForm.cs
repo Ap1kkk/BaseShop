@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class OrdersForm : Form
     {
@@ -28,24 +28,21 @@ namespace SportsNutritionShop.View
             }
         }
 
-        private UserService _userService;
-        private OrderService _orderService;
-        private PaymentService _paymentService;
+        private MainController _mainController;
 
         private List<Order> _orders = new List<Order>();
         private Order _selectedOrder;
 
-        public OrdersForm(UserService userService, OrderService orderService, PaymentService paymentService)
+        public OrdersForm(MainController mainController)
         {
             InitializeComponent();
-            _userService = userService;
-            _userService.OnUserChanged += _userService_OnUserChanged;
-            _userService.OnUserLoggedOut += UpdateOrders;
 
-            _orderService = orderService;
-            _orderService.OnOrdersChanged += UpdateOrders;
+            _mainController = mainController;
 
-            _paymentService = paymentService;
+            _mainController.UserController.OnUserChanged += _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut += UpdateOrders;
+
+            _mainController.OrderController.OnOrdersChanged += UpdateOrders;
 
             OrdersDataGridView.RowEnter += OrdersDataGridView_RowEnter;
 
@@ -54,14 +51,18 @@ namespace SportsNutritionShop.View
             UpdateOrders();
         }
 
-        private void _userService_OnUserChanged(User user)
+        private void _userController_OnUserChanged(User user)
         {
             UpdateOrders();
         }
 
         ~OrdersForm()
         {
-            _orderService.OnOrdersChanged -= UpdateOrders;
+            _mainController.UserController.OnUserChanged -= _userController_OnUserChanged;
+            _mainController.UserController.OnUserLoggedOut -= UpdateOrders;
+
+            _mainController.OrderController.OnOrdersChanged -= UpdateOrders;
+
             OrdersDataGridView.RowEnter -= OrdersDataGridView_RowEnter;
         }
 
@@ -82,7 +83,7 @@ namespace SportsNutritionShop.View
 
         private void UpdateOrders()
         {
-            _orders = _orderService.GetOrders();
+            _orders = _mainController.GetOrders();
 
             OrdersDataGridView.DataSource = null;
             OrdersDataGridView.DataSource = _orders.ConvertAll(new Converter<Order, OrderView>(ConvertOrderToView));
@@ -104,15 +105,10 @@ namespace SportsNutritionShop.View
         {
             Close();
         }
-        
-        private void OrdersForm_Load(object sender, EventArgs e)
-        {
-            Text = "Orders";
-        }
 
         private void PayButton_Click(object sender, EventArgs e)
         {
-            _paymentService.ProcessPayment(_selectedOrder, out string message);
+            _mainController.ProcessPayment(_selectedOrder, out string message);
             MessageBox.Show(message);
         }
     }

@@ -1,5 +1,5 @@
-﻿using SportsNutritionShop.Model;
-using SportsNutritionShop.Services;
+﻿using AutoPartsShop.Model;
+using AutoPartsShop.Controllers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,25 +10,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SportsNutritionShop.View
+namespace AutoPartsShop.View
 {
     public partial class UserProfileForm : Form
     {
-        private UserService _userService;
+        private MainController _mainController;
 
         private LoginForm _loginForm;
 
-        public UserProfileForm(UserService userService)
+        public UserProfileForm(MainController mainController)
         {
             InitializeComponent();
-            
-            _loginForm = new LoginForm(userService);
 
-            _userService = userService;
-            _userService.OnUserChanged += UpdateUserProfile;
-            _userService.OnUserLoggedOut += OnUserLoggedOut;
+            _loginForm = new LoginForm(mainController);
+
+            _mainController = mainController;
+            _mainController.UserController.OnUserChanged += UpdateUserProfile;
+            _mainController.UserController.OnUserLoggedOut += OnUserLoggedOut;
 
             OnUserLoggedOut();
+        }
+        ~UserProfileForm()
+        {
+            _mainController.UserController.OnUserChanged -= UpdateUserProfile;
+            _mainController.UserController.OnUserLoggedOut -= OnUserLoggedOut;
         }
 
         private void OnUserLoggedOut()
@@ -36,17 +41,13 @@ namespace SportsNutritionShop.View
             UpdateShownButton();
             string username = "---";
             string email = "---";
-            UpdateUserProfileLabels(username, email, false);
-        }
-
-        ~UserProfileForm()
-        {
-            _userService.OnUserChanged -= UpdateUserProfile;
+            string adress = "---";
+            UpdateUserProfileLabels(username, email, adress, false);
         }
 
         private void UpdateShownButton()
         {
-            if(_userService.CurrentUser != null) 
+            if(_mainController.UserController.CurrentUser != null) 
             { 
                 LoginButton.Visible = false;
                 LogoutButton.Visible = true;
@@ -62,15 +63,16 @@ namespace SportsNutritionShop.View
         {
             if(user != null)
             {
-                UpdateUserProfileLabels(user.Username, user.Email, user.IsAdmin);
+                UpdateUserProfileLabels(user.Username, user.Email, user.Adress, user.IsAdmin);
                 UpdateShownButton();
             }
         }
 
-        private void UpdateUserProfileLabels(string username,  string email, bool isAdmin)
+        private void UpdateUserProfileLabels(string username,  string email, string adress, bool isAdmin)
         {
             lblUsername.Text = $"Имя пользователя: {username}";
             lblEmail.Text = $"Электронная почта: {email}";
+            lblAdress.Text = $"Адрес: {adress}";
 
             AdminLabel.Visible = isAdmin;
         }
@@ -82,7 +84,7 @@ namespace SportsNutritionShop.View
 
         private void LogoutButton_Click(object sender, EventArgs e)
         {
-            _userService.LogOutUser();
+            _mainController.LogOutUser();
         }
     }
 }
